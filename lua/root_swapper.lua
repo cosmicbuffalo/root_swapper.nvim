@@ -11,13 +11,34 @@ local root_indicators = {}
 local root_cache = {}
 local did_setup = false
 
+local function get_path_from_buffer()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" then
+    return nil
+  end
+
+  -- Check if this is an oil buffer
+  if bufname:match("^oil://") then
+    -- Try to use oil's API if available
+    local ok, oil = pcall(require, "oil")
+    if ok and oil.get_current_dir then
+      return oil.get_current_dir()
+    end
+    -- Fallback: parse the oil:// URL directly
+    local dir = bufname:gsub("^oil://", "")
+    return dir
+  end
+
+  -- Regular buffer - return the directory containing the file
+  return vim.fs.dirname(bufname)
+end
+
 function M.swap_root()
   -- Get directory path to start search from
-  local path = vim.api.nvim_buf_get_name(0)
-  if path == "" then
+  local path = get_path_from_buffer()
+  if path == nil then
     return
   end
-  path = vim.fs.dirname(path)
 
   -- Try cache and resort to searching upward for root directory
   local root = root_cache[path]
