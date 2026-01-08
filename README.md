@@ -1,6 +1,8 @@
 # `root_swapper.nvim`
 
-This is a tiny plugin that sets up an autocommand to `lcd` to detected root directories when switching buffers. 
+This is a tiny plugin that sets up an autocommand to `lcd` to detected root directories when switching buffers.
+
+Supports [oil.nvim](https://github.com/stevearc/oil.nvim) buffers - when navigating directories in oil, your `lcd` will update to the appropriate project root based on the current directory.
 
 
 # 📦 Installation
