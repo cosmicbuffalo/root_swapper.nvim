@@ -51,7 +51,7 @@ function M.swap_root()
     root_cache[path] = root
   end
 
-  vim.cmd.lcd({ args = { root } })
+  vim.cmd.lcd({ args = { vim.fn.fnameescape(root) } })
 end
 
 local function setup_autocmd()
