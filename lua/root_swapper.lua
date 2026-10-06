@@ -25,8 +25,11 @@ local function get_path_from_buffer()
   if bufname:match("^oil://") then
     -- Try to use oil's API if available
     local ok, oil = pcall(require, "oil")
+    if ok and oil.get_current_dir then
+      return oil.get_current_dir()
+    end
     -- Fallback: parse the oil:// URL directly
-    return (ok and oil and oil.get_current_dir) and oil.get_current_dir() or (bufname:gsub("^oil://", ""))
+    return (bufname:gsub("^oil://", ""))
   end
 
   -- Regular buffer - return the directory containing the file
